@@ -6,25 +6,66 @@
 <meta name="mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #050505; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .controls { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
-        .btn { background: #222; border: 1px solid #444; color: #fff; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .btn:hover { background: #00ff88; color: #000; }
-        .header { font-size: 24px; font-weight: 900; color: #00ff88; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; width: 100%; max-width: 800px; margin-bottom: 30px; }
-        .day-box { background: #111; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #222; }
-        .julian { font-size: 12px; color: #ffcc00; margin-top: 5px; font-family: monospace; }
-        .today { background: #004422; border: 2px solid #00ff88; }
-        
-        /* Expiry Calculator Section */
-        .calc-section { 
-            background: #1a1a1a; padding: 20px; border-radius: 15px; border: 2px solid #00ff88;
-            width: 100%; max-width: 800px; box-sizing: border-box;
-        }
-        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        input { background: #333; border: 1px solid #555; color: #fff; padding: 10px; border-radius: 5px; width: 100%; box-sizing: border-box; }
-        #result { margin-top: 20px; font-size: 20px; font-weight: bold; color: #ffcc00; text-align: center; }
-    </style>
+    /* Base styles for your MSI screen */
+    body { 
+        background: #050505; color: #fff; font-family: 'Segoe UI', sans-serif; 
+        display: flex; flex-direction: column; align-items: center; padding: 10px;
+        margin: 0; min-height: 100vh;
+    }
+
+    /* Make the title hit hard on mobile */
+    .main-title { 
+        font-size: clamp(20px, 8vw, 32px); /* Scales perfectly for phone vs laptop */
+        font-weight: 900; text-align: center; margin: 15px 0; 
+    }
+
+    /* Big tappable buttons for your thumbs */
+    .btn { 
+        background: #222; border: 1px solid #444; color: #fff; 
+        padding: 15px 25px; border-radius: 12px; cursor: pointer; 
+        font-weight: bold; flex: 1; text-align: center;
+    }
+
+    .controls { 
+        display: flex; width: 100%; max-width: 500px; 
+        justify-content: space-between; align-items: center; gap: 10px; 
+    }
+
+    /* The Calendar: Responsive Grid */
+    .calendar-grid { 
+        display: grid; grid-template-columns: repeat(7, 1fr); 
+        gap: 5px; width: 100%; max-width: 600px; margin-top: 20px;
+    }
+
+    .day-box { 
+        background: rgba(255,255,255,0.05); padding: 8px 2px; 
+        border-radius: 8px; border: 1px solid #222; 
+    }
+
+    .date { font-size: 16px; font-weight: bold; }
+    .julian { font-size: 10px; color: #ffcc00; }
+
+    /* Expiry Calc: Full width on phone */
+    .calc-section { 
+        background: #111; padding: 20px; border-radius: 20px; 
+        border: 1px solid #00ff88; width: 95%; max-width: 500px; 
+        margin-top: 30px; box-sizing: border-box;
+    }
+
+    .calc-grid { display: flex; flex-direction: column; gap: 15px; }
+
+    input { 
+        background: #222; border: 1px solid #444; color: #fff; 
+        padding: 15px; border-radius: 10px; font-size: 16px; /* Prevents iPhone zoom-in */
+    }
+
+    /* MSI Layout: If screen is wider than 600px */
+    @media (min-width: 600px) {
+        .calc-grid { flex-direction: row; }
+        .day-box { padding: 15px; }
+        .date { font-size: 20px; }
+    }
+</style>
 </head>
 
 <body>
