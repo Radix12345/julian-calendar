@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homie Expiry Pro</title>
+    <title>🏠 Homie Expiry Pro</title>
     <link rel="apple-touch-icon" href="icon.png">
     <meta name="mobile-web-app-capable" content="yes">
     
@@ -23,7 +23,7 @@
 
         /* Glassmorphism Effect */
         .header-container, .calc-section, .day-box {
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -35,7 +35,7 @@
             justify-content: space-between;
             align-items: center;
             width: 95%;
-            max-width: 800px;
+            max-width: 850px;
             padding: 15px;
             margin-top: 20px;
             border-radius: 20px;
@@ -43,10 +43,10 @@
         }
 
         .profile-pic {
-            width: 60px; height: 60px;
+            width: 65px; height: 65px;
             border-radius: 50%;
             border: 2px solid #00ff88;
-            box-shadow: 0 0 10px #00ff88;
+            box-shadow: 0 0 15px #00ff88;
         }
 
         /* The Running Banner Section */
@@ -67,7 +67,7 @@
             color: #00ff88;
             font-size: 14px;
             letter-spacing: 2px;
-            animation: scroll-left 15s linear infinite;
+            animation: scroll-left 30s linear infinite;
         }
 
         @keyframes scroll-left {
@@ -75,13 +75,14 @@
             100% { transform: translateX(-100%); }
         }
 
-        .weather-section { text-align: right; min-width: 80px; }
+        .weather-section { text-align: right; min-width: 90px; }
         #homie-temp { font-size: 24px; font-weight: bold; color: #00ff88; }
-        #homie-vibe { font-size: 10px; color: #ffcc00; font-style: italic; }
+        #homie-vibe { font-size: 11px; color: #ffcc00; font-weight: bold; }
 
         .main-title { 
             font-size: clamp(22px, 8vw, 34px); 
-            font-weight: 900; margin: 25px 0; 
+            font-weight: 900; margin: 25px 0;
+            text-shadow: 0 0 10px rgba(0,255,136,0.5);
         }
 
         .controls { 
@@ -92,8 +93,9 @@
         .btn { 
             background: rgba(255,255,255,0.1); border: 1px solid #444; color: #fff; 
             padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: bold;
+            transition: 0.3s;
         }
-        .btn:hover { background: #00ff88; color: #000; }
+        .btn:hover { background: #00ff88; color: #000; transform: scale(1.05); }
 
         .calendar-grid { 
             display: grid; grid-template-columns: repeat(7, 1fr); 
@@ -103,20 +105,23 @@
         .day-box { padding: 10px 2px; border-radius: 12px; text-align: center; }
         .date { font-size: 18px; font-weight: bold; }
         .julian { font-size: 11px; color: #ffcc00; font-family: monospace; }
-        .today { border: 2px solid #00ff88; background: rgba(0, 255, 136, 0.1); }
+        .today { border: 2px solid #00ff88; background: rgba(0, 255, 136, 0.2); }
 
         .calc-section { 
             padding: 20px; border-radius: 25px; width: 95%; 
-            max-width: 500px; margin-top: 30px; border: 1px solid rgba(0, 255, 136, 0.3);
+            max-width: 550px; margin-top: 30px; border: 1px solid rgba(0, 255, 136, 0.4);
         }
 
         .calc-grid { display: flex; flex-direction: column; gap: 15px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #00ff88; }
+        
         input { 
-            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); 
-            color: #fff; padding: 15px; border-radius: 12px; font-size: 16px;
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: #fff; padding: 15px; border-radius: 12px; font-size: 16px; width: 100%; box-sizing: border-box;
         }
+        input:focus { border-color: #00ff88; outline: none; }
 
-        #result { margin-top: 20px; font-weight: bold; text-align: center; }
+        #result { margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.3); }
 
         @media (min-width: 600px) { .calc-grid { flex-direction: row; } }
     </style>
@@ -125,12 +130,12 @@
 
     <div class="header-container">
         <div class="profile-section">
-            <img src="icon.png" class="profile-pic" alt="Homie">
+            <img src="icon.png" class="profile-pic" alt="Homie Face">
         </div>
 
         <div class="banner-wrapper">
             <div class="scrolling-text">
-                JUST DO IT... YOU CAN DO IT... THE GRIND NEVER STOPS... STAY HUNGRY... BELIEVE IN THE CODE...
+                🔥 JUST DO IT... 💪 YOU CAN DO IT... 🏁 THE GRIND NEVER STOPS... 🔋 STAY HUNGRY... 💻 BELIEVE IN THE CODE... 🖥️ MSI POWER... 🌲 NATURE VIBES... 💰 HUSTLE DAILY... 🛠️ BUILDING THE FUTURE... ✅ VIBE CHECK PASSED... 💎 STAY SHARP...
             </div>
         </div>
 
@@ -141,13 +146,13 @@
     </div>
 
     <div class="main-title">
-        HOMIE <span style="color: #00ff88;">EXPIRY</span> CALCULATOR
+        👑 HOMIE <span style="color: #00ff88;">EXPIRY</span> CALCULATOR 📅
     </div>
 
     <div class="controls">
-        <button class="btn" onclick="changeMonth(-1)">PREV</button>
-        <div id="monthName" style="font-weight:bold; color:#00ff88;">MONTH YEAR</div>
-        <button class="btn" onclick="changeMonth(1)">NEXT</button>
+        <button class="btn" onclick="changeMonth(-1)">⬅️ PREV</button>
+        <div id="monthName" style="font-weight:bold; color:#00ff88; letter-spacing: 1px;">MONTH YEAR</div>
+        <button class="btn" onclick="changeMonth(1)">NEXT ➡️</button>
     </div>
 
     <div class="calendar-grid" id="calendar"></div>
@@ -155,15 +160,15 @@
     <div class="calc-section">
         <div class="calc-grid">
             <div>
-                <label>Production Date:</label>
+                <label>🏗️ Production Date:</label>
                 <input type="date" id="prodDate" oninput="calculateExpiry()">
             </div>
             <div>
-                <label>Shelf Life (Months):</label>
+                <label>⏳ Shelf Life (Months):</label>
                 <input type="number" id="monthsToAdd" placeholder="e.g. 12" oninput="calculateExpiry()">
             </div>
         </div>
-        <div id="result">Set shelf life...</div>
+        <div id="result">⚙️ Enter info to calculate...</div>
     </div>
 
     <script>
@@ -186,8 +191,9 @@
                 if (d.getDate() != parts[2]) d.setDate(0); 
                 
                 document.getElementById('result').innerHTML = `
-                    <span style="color:#00ff88;">Expires on:</span><br>${d.toDateString()}<br>
-                    <span style="color:#ffcc00;">Julian Day: ${getJulian(d)}</span>
+                    <span style="color:#00ff88; font-size: 1.2em;">✅ Expires on:</span><br>
+                    <span style="font-size: 1.1em;">📅 ${d.toDateString()}</span><br>
+                    <span style="color:#ffcc00;">🔢 Julian Day: ${getJulian(d)}</span>
                 `;
             }
         }
@@ -197,7 +203,7 @@
             const year = viewDate.getFullYear();
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
-            document.getElementById('monthName').innerText = viewDate.toLocaleString('default', { month: 'short' }).toUpperCase() + " " + year;
+            document.getElementById('monthName').innerText = "🗓️ " + viewDate.toLocaleString('default', { month: 'short' }).toUpperCase() + " " + year;
             const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const today = new Date();
@@ -208,7 +214,7 @@
                 const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
                 const box = document.createElement('div');
                 box.className = `day-box ${isToday ? 'today' : ''}`;
-                box.innerHTML = `<div class="date">${d}</div><div class="julian">${getJulian(dateObj)}</div>`;
+                box.innerHTML = `<div class="date">${d}</div><div class="julian">#${getJulian(dateObj)}</div>`;
                 calendar.appendChild(box);
             }
         }
@@ -218,7 +224,7 @@
                 const { latitude, longitude } = pos.coords;
                 const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
                 const data = await res.json();
-                document.getElementById('homie-temp').innerText = Math.round(data.current_weather.temperature) + "°C";
+                document.getElementById('homie-temp').innerText = "🌡️ " + Math.round(data.current_weather.temperature) + "°C";
             });
         }
 
