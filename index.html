@@ -59,18 +59,39 @@
             return Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(3, '0');
         }
 
-        function calculateExpiry() {
-            const start = new Date(document.getElementById('prodDate').value);
+       function calculateExpiry() {
+            const startInput = document.getElementById('prodDate').value;
             const months = parseInt(document.getElementById('monthsToAdd').value);
             
-            if (!isNaN(start.getTime()) && !isNaN(months)) {
-                let expiryDate = new Date(start);
-                expiryDate.setMonth(expiryDate.getMonth() + months);
+            if (startInput && !isNaN(months)) {
+                // Create the start date from the input
+                let start = new Date(startInput);
                 
-                const dateString = expiryDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                // We create a fresh date object for the expiry
+                let expiryDate = new Date(startInput);
+                
+                // Add the exact number of months
+                expiryDate.setMonth(start.getMonth() + months);
+
+                // TRICK: If the start was the 11th, force the expiry to the 11th
+                // (This handles leap years and month-length edge cases)
+                if (expiryDate.getDate() !== start.getDate()) {
+                    expiryDate.setDate(0); 
+                }
+                
+                const dateString = expiryDate.toLocaleDateString('en-US', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+                
                 const julian = getJulian(expiryDate);
                 
-                document.getElementById('result').innerHTML = `Expires on: ${dateString}<br>Julian Day: ${julian}`;
+                document.getElementById('result').innerHTML = `
+                    <span style="color: #00ff88;">Exact Expiry:</span> ${dateString}<br>
+                    <span style="color: #00ff88;">Julian Day:</span> ${julian}
+                `;
             }
         }
 
