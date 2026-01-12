@@ -6,18 +6,20 @@
     <title>Homie Expiry Pro</title>
     
     <link rel="apple-touch-icon" href="icon.png">
-    
     <link rel="icon" type="image/png" href="icon.png">
-    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="HomieCalc">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <style>
         body { 
-            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
+            background: #000; /* Backup color */
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background 2s ease-in-out; /* Smooth nature fade */
             color: #fff; 
-            font-family: 'Segoe UI', sans-serif; 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -26,9 +28,9 @@
             min-height: 100vh;
         }
 
-        /* Glassmorphism Effect */
+        /* Glassmorphism Containers */
         .header-container, .calc-section, .day-box {
-            background: rgba(0, 0, 0, 0.65);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -54,7 +56,6 @@
             box-shadow: 0 0 15px #00ff88;
         }
 
-        /* The Running Banner Section */
         .banner-wrapper {
             flex: 1;
             margin: 0 20px;
@@ -126,7 +127,7 @@
         }
         input:focus { border-color: #00ff88; outline: none; }
 
-        #result { margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.3); }
+        #result { margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(0,0,0,0.3); text-align: center; }
 
         @media (min-width: 600px) { .calc-grid { flex-direction: row; } }
     </style>
@@ -156,11 +157,11 @@
 
     <div class="controls">
         <button class="btn" onclick="changeMonth(-1)">⬅️ PREV</button>
-        <div id="monthName" style="font-weight:bold; color:#00ff88; letter-spacing: 1px;">MONTH YEAR</div>
+        <div id="monthName" style="font-weight:bold; color:#00ff88;">MONTH YEAR</div>
         <button class="btn" onclick="changeMonth(1)">NEXT ➡️</button>
     </div>
 
-    <div class="calendar-grid" id="calendar"></div>
+    <div id="calendar" class="calendar-grid"></div>
 
     <div class="calc-section">
         <div class="calc-grid">
@@ -180,12 +181,29 @@
         let viewDate = new Date();
         document.getElementById('prodDate').valueAsDate = new Date();
 
+        // 1. Julian Date Logic
         function getJulian(date) {
             const start = new Date(date.getFullYear(), 0, 0);
             const diff = date - start;
             return Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(3, '0');
         }
 
+        // 2. Background Rotator
+        function changeBackground() {
+            const images = [
+                'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1920&q=80',
+                'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80',
+                'https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=1920&q=80',
+                'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80',
+                'https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=1920&q=80'
+            ];
+            const randomImage = images[Math.floor(Math.random() * images.length)];
+            document.body.style.backgroundImage = `url('${randomImage}')`;
+        }
+        setInterval(changeBackground, 10000); // 10s rotation
+        changeBackground();
+
+        // 3. Expiry Logic
         function calculateExpiry() {
             const startInput = document.getElementById('prodDate').value;
             const months = parseInt(document.getElementById('monthsToAdd').value);
@@ -194,7 +212,6 @@
                 let d = new Date(parts[0], parts[1]-1, parts[2]);
                 d.setMonth(d.getMonth() + months);
                 if (d.getDate() != parts[2]) d.setDate(0); 
-                
                 document.getElementById('result').innerHTML = `
                     <span style="color:#00ff88; font-size: 1.2em;">✅ Expires on:</span><br>
                     <span style="font-size: 1.1em;">📅 ${d.toDateString()}</span><br>
@@ -203,6 +220,7 @@
             }
         }
 
+        // 4. Calendar Logic
         function renderCalendar() {
             const month = viewDate.getMonth();
             const year = viewDate.getFullYear();
@@ -224,13 +242,14 @@
             }
         }
 
+        // 5. Weather Logic
         async function getVibes() {
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`);
                 const data = await res.json();
                 document.getElementById('homie-temp').innerText = "🌡️ " + Math.round(data.current_weather.temperature) + "°C";
-            });
+            }, () => { document.getElementById('homie-temp').innerText = "Vibe ON"; });
         }
 
         function changeMonth(offset) { viewDate.setMonth(viewDate.getMonth() + offset); renderCalendar(); }
