@@ -1,70 +1,96 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Julian Homie Calendar</title>
+    <title>Julian Calendar Pro</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #0a0a0a; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .header { font-size: 24px; font-weight: bold; color: #00ff88; margin-bottom: 20px; }
+        body { background: #050505; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .controls { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .btn { 
+            background: #222; border: 1px solid #444; color: #fff; padding: 10px 20px; 
+            border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold;
+        }
+        .btn:hover { background: #00ff88; color: #000; }
+        .header { font-size: 28px; font-weight: 900; color: #00ff88; letter-spacing: 2px; }
         .calendar-grid { 
             display: grid; grid-template-columns: repeat(7, 1fr); 
-            gap: 10px; width: 100%; max-width: 600px; 
+            gap: 12px; width: 100%; max-width: 800px; 
         }
         .day-box { 
-            background: #1a1a1a; padding: 10px; border-radius: 8px; 
-            text-align: center; border: 1px solid #333;
+            background: #111; padding: 15px; border-radius: 10px; 
+            text-align: center; border: 1px solid #222; transition: 0.2s;
         }
-        .date { font-size: 18px; font-weight: bold; }
-        .julian { font-size: 12px; color: #ffcc00; margin-top: 5px; }
-        .today { border: 2px solid #00ff88; box-shadow: 0 0 15px #00ff88; }
-        .day-name { color: #888; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
+        .day-box:hover { border-color: #00ff88; transform: translateY(-3px); }
+        .date { font-size: 22px; font-weight: bold; }
+        .julian { font-size: 14px; color: #ffcc00; margin-top: 8px; font-family: monospace; }
+        .today { background: #004422; border: 2px solid #00ff88; }
+        .weekday-labels { display: grid; grid-template-columns: repeat(7, 1fr); width: 100%; max-width: 800px; margin-bottom: 10px; color: #555; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="header" id="monthName">JANUARY 2026</div>
-    <div class="calendar-grid" id="calendar">
-        </div>
+
+    <div class="controls">
+        <button class="btn" onclick="changeMonth(-1)">PREV</button>
+        <div class="header" id="monthName">MONTH YEAR</div>
+        <button class="btn" onclick="changeMonth(1)">NEXT</button>
+    </div>
+
+    <div class="weekday-labels">
+        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div>
+    </div>
+    <div class="calendar-grid" id="calendar"></div>
 
     <script>
-        const now = new Date();
-        const month = now.getMonth();
-        const year = now.getFullYear();
-        
-        document.getElementById('monthName').innerText = now.toLocaleString('default', { month: 'long' }) + " " + year;
+        let viewDate = new Date(); // Tracks what month we are looking at
 
         function getJulian(date) {
             const start = new Date(date.getFullYear(), 0, 0);
             const diff = date - start;
             const oneDay = 1000 * 60 * 60 * 24;
-            return Math.floor(diff / oneDay);
+            const dayNum = Math.floor(diff / oneDay);
+            // This makes it 3 digits: 001, 002, etc.
+            return dayNum.toString().padStart(3, '0');
         }
 
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const calendar = document.getElementById('calendar');
+        function renderCalendar() {
+            const month = viewDate.getMonth();
+            const year = viewDate.getFullYear();
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            document.getElementById('monthName').innerText = viewDate.toLocaleString('default', { month: 'long' }).toUpperCase() + " " + year;
 
-        // Add empty boxes for the start of the month
-        for (let i = 0; i < firstDay; i++) {
-            const empty = document.createElement('div');
-            calendar.appendChild(empty);
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+
+            for (let i = 0; i < firstDay; i++) {
+                calendar.appendChild(document.createElement('div'));
+            }
+
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateObj = new Date(year, month, d);
+                const isToday = d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                
+                const box = document.createElement('div');
+                box.className = `day-box ${isToday ? 'today' : ''}`;
+                
+                const julian = getJulian(dateObj);
+                
+                box.innerHTML = `
+                    <div class="date">${d}</div>
+                    <div class="julian">J:${julian}</div>
+                `;
+                calendar.appendChild(box);
+            }
         }
 
-        // Generate the days
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dateObj = new Date(year, month, d);
-            const isToday = d === now.getDate();
-            
-            const box = document.createElement('div');
-            box.className = `day-box ${isToday ? 'today' : ''}`;
-            
-            const julian = getJulian(dateObj);
-            
-            box.innerHTML = `
-                <div class="date">${d}</div>
-                <div class="julian">JD: ${julian}</div>
-            `;
-            calendar.appendChild(box);
+        function changeMonth(offset) {
+            viewDate.setMonth(viewDate.getMonth() + offset);
+            renderCalendar();
         }
+
+        renderCalendar();
     </script>
 </body>
 </html>
